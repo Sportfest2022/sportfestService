@@ -13,7 +13,7 @@ public class Station {
     @Column(name = "name", nullable = false, length = 32)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "spiel_id", nullable = false)
     private Spiel spiel;
 

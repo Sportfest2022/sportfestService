@@ -11,11 +11,11 @@ public class Match {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "klasse1_id", nullable = false)
     private Klasse klasse1;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "klasse2_id", nullable = false)
     private Klasse klasse2;
 
@@ -27,6 +27,18 @@ public class Match {
 
     @Column(name = "start", nullable = false)
     private Instant start;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "station_id", nullable = false)
+    private Station station;
+
+    public Station getStation() {
+        return station;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
+    }
 
     public Integer getId() {
         return id;

@@ -22,6 +22,29 @@ public class Betreuer {
     @Column(name = "passwort", nullable = false, length = 6)
     private String passwort;
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "station_id", nullable = false)
+    private Station station;
+
+    @Column(name = "admin", nullable = false)
+    private Boolean admin = false;
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
+
+    public Station getStation() {
+        return station;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
+    }
+
     public Integer getId() {
         return id;
     }
