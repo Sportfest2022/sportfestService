@@ -1,13 +1,19 @@
 package de.sportfest22.service.sportfestservice.controller;
 
 import de.sportfest22.service.sportfestservice.dto.MatchDto;
-import de.sportfest22.service.sportfestservice.model.Match;
+import de.sportfest22.service.sportfestservice.model.MatchTyp1ergebni;
+import de.sportfest22.service.sportfestservice.repository.ClassRepository;
 import de.sportfest22.service.sportfestservice.repository.MatchRepository;
+import de.sportfest22.service.sportfestservice.repository.Type1ResultRepository;
+import de.sportfest22.service.sportfestservice.repository.UserRepository;
 import de.sportfest22.service.sportfestservice.service.MatchService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +25,23 @@ public class MatchController {
     private final MatchRepository matchRepository;
     private final MatchService matchService;
 
+    private final Type1ResultRepository type1ResultRepository;
+
+    private final ClassRepository classRepository;
+
+    private final UserRepository userRepository;
+
     @Autowired
-    public MatchController(MatchRepository matchRepository, MatchService matchService) {
+    public MatchController(MatchRepository matchRepository,
+                           MatchService matchService,
+                           Type1ResultRepository type1ResultRepository,
+                           ClassRepository classRepository,
+                           UserRepository userRepository) {
         this.matchRepository = matchRepository;
         this.matchService = matchService;
+        this.type1ResultRepository = type1ResultRepository;
+        this.classRepository = classRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -85,5 +104,22 @@ public class MatchController {
             ));
         });
         return convertedMatches;
+    }
+
+    @GetMapping("/result/type1/{userName}/{matchId}/{winningTeamname}")
+    public boolean saveType1Result(
+            @PathVariable String userName,
+            @PathVariable Integer matchId,
+            @PathVariable String winningTeamname) {
+
+        // TODO: Alles mal validieren
+        // TODO: Doppelte Einträge und so vermeiden
+
+        type1ResultRepository.save(new MatchTyp1ergebni(null,
+                this.classRepository.findKlasseByName(winningTeamname),
+                this.userRepository.findBetreuerByNutzername(userName),
+                this.matchRepository.findById(matchId),
+                Instant.now()));
+        return true;
     }
 }

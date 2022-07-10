@@ -1,9 +1,12 @@
 package de.sportfest22.service.sportfestservice.model;
 
+import lombok.AllArgsConstructor;
+
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
+@AllArgsConstructor
 @Table(name = "match_typ1ergebnis")
 public class MatchTyp1ergebni {
     @Id

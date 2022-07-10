@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface MatchRepository extends JpaRepository<Match, Long> {
     Match findById(Integer id);
+    Match getMatchById(Long id);
     Match findMatchByStartIsBefore(Instant timestamp);
     List<Match> findMatchesByStationId(Integer id);
 }

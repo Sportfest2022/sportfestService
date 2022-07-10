@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface ClassRepository extends JpaRepository<Klasse, Long> {
     List<Klasse> findAllByKlassenstufeId(Integer klassenstufeId);
+
+    Klasse findKlasseByName(String name);
 }
