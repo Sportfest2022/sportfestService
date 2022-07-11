@@ -18,4 +18,5 @@ public class MatchDto {
     private final String status;
     private final String betreuer;
     private final String gamename;
+    private final String stationname;
 }

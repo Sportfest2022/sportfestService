@@ -1,6 +1,7 @@
 package de.sportfest22.service.sportfestservice.repository;
 
 import de.sportfest22.service.sportfestservice.model.Betreuer;
+import de.sportfest22.service.sportfestservice.model.Klasse;
 import de.sportfest22.service.sportfestservice.model.Match;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -15,4 +16,6 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     Match getMatchById(Long id);
     Match findMatchByStartIsBefore(Instant timestamp);
     List<Match> findMatchesByStationId(Integer id);
+    List<Match> findMatchesByKlasse1(Klasse klasse);
+    List<Match> findMatchesByKlasse2(Klasse klasse);
 }

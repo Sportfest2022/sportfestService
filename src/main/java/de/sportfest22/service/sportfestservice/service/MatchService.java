@@ -9,10 +9,12 @@ import de.sportfest22.service.sportfestservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class MatchService {
@@ -28,12 +30,35 @@ public class MatchService {
         this.type1ResultRepository = type1ResultRepository;
     }
 
-    public List<Match> getMatchesByUsername(String username) {
+    public List<Match> getMatchesByUsernameWithoutAnswer(String username) {
         Betreuer betreuer = this.userRepository.findBetreuerByNutzername(username);
         if (betreuer == null) return null;
         Station station = betreuer.getStation();
         if (station == null) return null;
-        return this.matchRepository.findMatchesByStationId(station.getId());
+
+        List<Match> matchesWithoutResult = new ArrayList<>();
+        List<Match> matchesByStationId = this.matchRepository.findMatchesByStationId(station.getId());
+        for (Match match : matchesByStationId) {
+            if (this.type1ResultRepository.findByMatch_Id(match.getId()) != null) continue;
+            matchesWithoutResult.add(match);
+        }
+        return matchesWithoutResult;
+    }
+
+    public Match getClosestMatchWithoutAnswer(String username) {
+        Instant now = Instant.now();
+        AtomicLong closestDirectionToMatch = new AtomicLong(-1);
+        Match closestMatch = null;
+
+        for (Match match : this.getMatchesByUsernameWithoutAnswer(username)) {
+            long until = now.until(match.getStart(), ChronoUnit.SECONDS);
+            if (until < closestDirectionToMatch.get() || closestDirectionToMatch.get() == -1) {
+                closestDirectionToMatch.set(until);
+                closestMatch = match;
+            }
+        }
+
+        return closestMatch;
     }
 
     public String getMatchResultStatus(Integer matchId) {
@@ -88,5 +113,14 @@ public class MatchService {
         }
 
         return result.toString();
+    }
+
+    public boolean isBelowFivMin(String username) {
+        Instant now = Instant.now();
+        Match closestMatch = this.getClosestMatchWithoutAnswer(username);
+        if (closestMatch == null) return false;
+        Timestamp timestamp = Timestamp.from(closestMatch.getStart());
+        long mins = now.until(timestamp.toInstant(), ChronoUnit.MINUTES);
+        return mins <= 4;
     }
 }
