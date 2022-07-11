@@ -59,6 +59,7 @@ public class MatchController {
         List<MatchDto> convertedMatches = new ArrayList<>();
 
         matchService.getMatchesByUsername(username).forEach(match -> {
+            String name = match.getStation().getSpiel().getName();
             convertedMatches.add(new MatchDto(
                     match.getId(),
                     match.getKlasse1(),
@@ -68,7 +69,8 @@ public class MatchController {
                     match.getStart(),
                     match.getStation(),
                     matchService.getMatchResultStatus(match.getId()),
-                    matchService.getResponsiveUserName(match.getId())
+                    matchService.getResponsiveUserName(match.getId()),
+                    name
             ));
         });
 
@@ -100,8 +102,9 @@ public class MatchController {
                     match.getStart(),
                     match.getStation(),
                     matchService.getMatchResultStatus(match.getId()),
-                    matchService.getResponsiveUserName(match.getId())
-            ));
+                    matchService.getResponsiveUserName(match.getId()),
+                    match.getStation().getSpiel().getName())
+            );
         });
         return convertedMatches;
     }

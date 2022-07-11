@@ -17,4 +17,5 @@ public class MatchDto {
     private final Station station;
     private final String status;
     private final String betreuer;
+    private final String gamename;
 }
