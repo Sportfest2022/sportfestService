@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface Type1ResultRepository extends JpaRepository<MatchTyp1ergebni, Long> {
     MatchTyp1ergebni findById(Integer id);
+    MatchTyp1ergebni findByMatch_Id(Integer matchId);
 }
