@@ -70,7 +70,7 @@ public class MatchService {
         Integer duration = match.getDuration();
 
         // TODO: Check for 2nd matchType
-        Boolean resultTurnedIn = this.type1ResultRepository.findById(matchId) != null;
+        Boolean resultTurnedIn = this.type1ResultRepository.findByMatch_Id(matchId) != null;
 
 
         // Match has started more than duration + 5 minutes ago
@@ -83,13 +83,14 @@ public class MatchService {
         }
 
 
-        if (officialStartDate.isBefore(Instant.now())) {
-            return "RUNNING";
-        }
 
         // Result was sent -> DONE
         if (resultTurnedIn) {
             return "DONE";
+        }
+
+        if (officialStartDate.isBefore(Instant.now())) {
+            return "RUNNING";
         }
 
         // Match has not officially started

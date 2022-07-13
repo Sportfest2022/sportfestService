@@ -22,11 +22,6 @@ public class TestController {
         this.classRepository = classRepository;
     }
 
-    @GetMapping("/all")
-    @ApiOperation(value = "getall", notes = "Gibt eine Liste aller existierenden Städte zurück. Die DTOs sind hierbei auf für die Darstellung benötigte Informationen reduziert.")
-    public List<Klasse> getAll() {
-        return classRepository.findAll();
-    }
 
 
     @GetMapping("/stufe/{klassenStufeId}")

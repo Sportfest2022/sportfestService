@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -49,6 +50,33 @@ public class MatchController {
     }
 
 
+    @GetMapping("all")
+    public List<MatchDto> getAll() {
+        List<MatchDto> convertedMatches = new ArrayList<>();
+        List<Match> all = this.matchRepository.findAll();
+        for (Match match : all) {
+            String gameName = match.getStation().getSpiel().getName();
+            convertedMatches.add(new MatchDto(
+                    match.getId(),
+                    match.getKlasse1(),
+                    match.getKlasse2(),
+                    match.getDuration(),
+                    match.get_public(),
+                    match.getStart().plusSeconds(60 * 60 * 2),
+                    match.getStation(),
+                    matchService.getMatchResultStatus(match.getId()),
+                    matchService.getResponsiveUserName(match.getId()),
+                    gameName,
+                    match.getStation().getName()
+            ));
+        }
+        convertedMatches.sort(Comparator.comparing(MatchDto::getStart));
+        for (MatchDto match : convertedMatches) {
+            System.out.println(match.getStart());
+        }
+        return convertedMatches;
+    }
+
     @GetMapping("{username}")
     public List<MatchDto> getAll(@PathVariable String username) {
         List<MatchDto> convertedMatches = new ArrayList<>();
@@ -60,7 +88,7 @@ public class MatchController {
                     match.getKlasse2(),
                     match.getDuration(),
                     match.get_public(),
-                    match.getStart(),
+                    match.getStart().plusSeconds(60 * 60 * 2),
                     match.getStation(),
                     matchService.getMatchResultStatus(match.getId()),
                     matchService.getResponsiveUserName(match.getId()),

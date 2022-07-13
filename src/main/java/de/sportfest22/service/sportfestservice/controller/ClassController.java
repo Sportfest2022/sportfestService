@@ -30,6 +30,12 @@ public class ClassController {
     }
 
 
+    @GetMapping("/all")
+    @ApiOperation(value = "getall", notes = "Gibt eine Liste aller existierenden Städte zurück. Die DTOs sind hierbei auf für die Darstellung benötigte Informationen reduziert.")
+    public List<Klasse> getAll() {
+        return classRepository.findAll();
+    }
+
     @GetMapping("/matches/{name}")
     @ApiOperation(value = "getall", notes = "Gibt eine Liste aller existierenden Städte zurück. Die DTOs sind hierbei auf für die Darstellung benötigte Informationen reduziert.")
     public List<MatchDto> getMatchesByClass(@PathVariable String name) {
