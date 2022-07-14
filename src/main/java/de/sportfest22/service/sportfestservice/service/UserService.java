@@ -37,8 +37,8 @@ public class UserService {
                 betreuer.getNachname(),
                 userRepository.existsBetreuerByNutzernameAndPasswort(name, password),
                 betreuer.getAdmin(),
-                betreuer.getStation().getId(),
-                betreuer.getStation().getSpiel().getGametype()
+                ((betreuer.getStation() != null) ? betreuer.getStation().getId() : -1),
+                ((betreuer.getStation() != null) ? betreuer.getStation().getId() : -1)
         );
     }
 

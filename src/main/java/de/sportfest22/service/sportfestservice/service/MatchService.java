@@ -98,7 +98,7 @@ public class MatchService {
             return "TBD";
         }
 
-        return "TBD";
+        return "404";
     }
 
     public String getResponsiveUserName(Integer matchId) {
@@ -110,7 +110,8 @@ public class MatchService {
             result.append(betreuer.getName());
             result.append(" ");
             result.append(betreuer.getNachname());
-            result.append(", ");
+            if (betreuersByStationId.indexOf(betreuer) + 1 != betreuersByStationId.size())
+                result.append(", ");
         }
 
         return result.toString();
